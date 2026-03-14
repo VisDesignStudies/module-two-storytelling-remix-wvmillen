@@ -1,6 +1,6 @@
 # Reading the Weather at Gale Crater
 
-Live Link: `TBD after GitHub Pages publish`
+Live Link: `https://visdesignstudies.github.io/module-two-storytelling-remix-wvmillen/`
 
 This project remixes Amber Thomas's Mars weather story from The Pudding into a single-page narrative built with vanilla HTML, CSS, JavaScript, and D3. The new version shifts the focus away from postcard-style Earth/Mars comparison and toward a more cautious argument about variability, seasonality, and measurement limits in Curiosity's local weather record from Gale Crater.
 
