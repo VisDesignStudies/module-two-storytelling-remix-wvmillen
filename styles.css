@@ -1,0 +1,522 @@
+:root {
+  --paper: #faf9f6;
+  --paper-strong: #ffffff;
+  --ink: #181818;
+  --muted: #666666;
+  --line: #dddddd;
+  --accent: #1f1f1f;
+  --accent-soft: rgba(0, 0, 0, 0.08);
+  --sage: #777777;
+  --sage-soft: rgba(0, 0, 0, 0.08);
+  --gold: #8d8d8d;
+  --shadow: rgba(0, 0, 0, 0.03);
+  --chart-sage: #5f7768;
+  --chart-sage-soft: rgba(95, 119, 104, 0.18);
+  --chart-rust: #ba6a45;
+  --chart-rust-soft: rgba(186, 106, 69, 0.16);
+  --chart-gold: #b08b38;
+  --max-width: 1180px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+  background: var(--paper);
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+}
+
+.page-shell {
+  width: min(calc(100% - 2rem), var(--max-width));
+  margin: 0 auto;
+  padding: 2rem 0 4rem;
+}
+
+.hero {
+  padding: 1.25rem 0 2.75rem;
+}
+
+.kicker,
+.section-label,
+.fact-label,
+.glossary-term,
+.status-text {
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  font-size: 0.77rem;
+}
+
+.kicker,
+.section-label,
+.fact-label,
+.glossary-term {
+  color: var(--muted);
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+h1 {
+  max-width: 11ch;
+  font-size: clamp(3rem, 7vw, 5.6rem);
+  line-height: 0.95;
+  margin-top: 0.45rem;
+}
+
+h2 {
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  line-height: 1.04;
+  margin-top: 0.35rem;
+}
+
+h3 {
+  font-size: 1.3rem;
+  line-height: 1.1;
+}
+
+p {
+  margin: 0;
+  line-height: 1.65;
+  font-size: 1.03rem;
+}
+
+.subtitle {
+  max-width: 44rem;
+  font-size: clamp(1.12rem, 2vw, 1.42rem);
+  margin-top: 1rem;
+  color: rgba(25, 33, 29, 0.88);
+}
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 1.4rem;
+  margin-top: 1.35rem;
+  color: var(--muted);
+}
+
+.fact-strip,
+.glossary-grid,
+.notes-grid,
+.credits-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.fact-strip {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 2.1rem;
+}
+
+.fact-card,
+.glossary-card,
+.viz-card,
+.note-card,
+.credits-grid article {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: none;
+}
+
+.fact-card,
+.glossary-card,
+.note-card,
+.credits-grid article {
+  padding: 0.9rem 0.95rem 0.95rem;
+  border-radius: 8px;
+}
+
+.fact-value {
+  font-size: 1.25rem;
+  line-height: 1.15;
+  margin-top: 0.35rem;
+  font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+}
+
+.fact-copy,
+.glossary-copy,
+.note-card p,
+.credits-grid p,
+.chart-note,
+.viz-subtitle {
+  font-size: 0.95rem;
+  color: rgba(24, 24, 24, 0.78);
+}
+
+.story-section {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.4fr);
+  gap: 1.5rem 2rem;
+  align-items: start;
+  padding: 2rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.intro-section {
+  border-top: 0;
+  padding-top: 0.25rem;
+}
+
+.section-copy {
+  max-width: 38rem;
+  display: grid;
+  gap: 0.95rem;
+}
+
+.chart-prompt {
+  color: var(--muted);
+  font-size: 0.97rem;
+}
+
+.glossary-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.viz-card {
+  border-radius: 10px;
+  padding: 1rem 1rem 0.95rem;
+}
+
+.viz-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: start;
+  margin-bottom: 0.75rem;
+}
+
+.viz-header-wrap {
+  flex-wrap: wrap;
+}
+
+.viz-subtitle {
+  margin-top: 0.35rem;
+  max-width: 34rem;
+}
+
+.status-text {
+  color: var(--muted);
+  text-align: right;
+}
+
+.control-button,
+.legend button {
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-radius: 999px;
+  background: var(--paper-strong);
+  color: var(--ink);
+  padding: 0.55rem 0.9rem;
+  font: inherit;
+  cursor: pointer;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.control-button:hover,
+.legend button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(0, 0, 0, 0.28);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.summary-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--muted);
+}
+
+.legend button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-inline: 0.8rem;
+}
+
+.legend button.is-off {
+  background: transparent;
+  color: var(--muted);
+}
+
+.legend-swatch {
+  width: 0.72rem;
+  height: 0.72rem;
+  border-radius: 999px;
+  display: inline-block;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+}
+
+.chart-frame {
+  width: 100%;
+  min-height: 420px;
+}
+
+.chart-frame-wheel {
+  min-height: 520px;
+}
+
+.chart-frame-quality {
+  min-height: 320px;
+}
+
+.chart-frame svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.chart-note {
+  margin-top: 0.75rem;
+}
+
+.notes-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.note-card h3,
+.credits-grid h3 {
+  margin-bottom: 0.45rem;
+}
+
+.fact-card,
+.glossary-card,
+.note-card,
+.credits-grid article {
+  backdrop-filter: blur(2px);
+}
+
+.credits {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  padding-top: 2rem;
+  margin-top: 1.4rem;
+}
+
+.credits-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 1rem;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 20;
+  max-width: 18rem;
+  padding: 0.7rem 0.8rem;
+  background: rgba(24, 24, 24, 0.96);
+  color: #f7f7f7;
+  border-radius: 12px;
+  box-shadow: 0 18px 36px rgba(16, 14, 10, 0.28);
+  pointer-events: none;
+}
+
+.tooltip p {
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.tooltip strong {
+  color: #ffffff;
+}
+
+.axis text,
+.grid text {
+  fill: var(--muted);
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  font-size: 12px;
+}
+
+.axis path,
+.axis line,
+.grid path,
+.grid line {
+  stroke: rgba(0, 0, 0, 0.14);
+}
+
+.grid line {
+  stroke-dasharray: 3 4;
+}
+
+.axis-label,
+.center-label,
+.chart-annotation {
+  fill: var(--muted);
+  font-size: 12px;
+}
+
+.center-label {
+  text-anchor: middle;
+  font-family: "Iowan Old Style", Georgia, serif;
+}
+
+.extremes-area {
+  fill: var(--chart-sage-soft);
+  stroke: var(--chart-sage);
+  stroke-width: 1.6px;
+}
+
+.extremes-midline {
+  fill: none;
+  stroke: rgba(95, 119, 104, 0.52);
+  stroke-width: 1.2px;
+  stroke-dasharray: 4 4;
+}
+
+.sol-marker {
+  transition: opacity 140ms ease;
+}
+
+.opacity-tick {
+  stroke-width: 1.8px;
+}
+
+.brush .selection {
+  fill: var(--chart-rust-soft);
+  stroke: rgba(186, 106, 69, 0.72);
+}
+
+.hover-line {
+  stroke: rgba(186, 106, 69, 0.82);
+  stroke-width: 1.4px;
+  stroke-dasharray: 4 4;
+}
+
+.hover-dot {
+  fill: var(--paper-strong);
+  stroke: var(--chart-rust);
+  stroke-width: 2px;
+}
+
+.wheel-full {
+  fill: none;
+  stroke: rgba(95, 119, 104, 0.34);
+  stroke-width: 2px;
+}
+
+.wheel-selected {
+  fill: none;
+  stroke: var(--chart-rust);
+  stroke-width: 3.2px;
+}
+
+.season-spoke {
+  stroke: rgba(0, 0, 0, 0.22);
+  stroke-width: 1px;
+}
+
+.season-hit {
+  fill: transparent;
+}
+
+.season-hit.is-active {
+  fill: rgba(176, 139, 56, 0.1);
+}
+
+.sol-marker.is-dimmed,
+.opacity-tick.is-dimmed {
+  opacity: 0.13;
+}
+
+.sol-marker.is-hovered {
+  stroke: var(--chart-rust);
+  stroke-width: 1.8px;
+}
+
+.quality-selection {
+  fill: rgba(186, 106, 69, 0.08);
+}
+
+.quality-row-bg {
+  fill: rgba(0, 0, 0, 0.035);
+}
+
+.quality-cell {
+  transition:
+    opacity 140ms ease,
+    stroke-width 140ms ease;
+}
+
+.quality-overlay {
+  fill: transparent;
+  cursor: crosshair;
+}
+
+code {
+  font-size: 0.9em;
+}
+
+@media (max-width: 980px) {
+  .story-section,
+  .fact-strip,
+  .glossary-grid,
+  .notes-grid,
+  .credits-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-shell {
+    width: min(calc(100% - 1.2rem), var(--max-width));
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    background: var(--paper);
+  }
+
+  .page-shell {
+    width: min(calc(100% - 0.9rem), var(--max-width));
+    padding-top: 1.2rem;
+  }
+
+  .hero {
+    padding-top: 0.4rem;
+  }
+
+  .viz-card {
+    border-radius: 18px;
+    padding: 0.9rem 0.8rem;
+  }
+
+  .viz-header {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .chart-frame {
+    min-height: 360px;
+  }
+
+  .chart-frame-wheel {
+    min-height: 420px;
+  }
+}

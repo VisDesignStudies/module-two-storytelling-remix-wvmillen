@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reading the Weather at Gale Crater</title>
+    <meta
+      name="description"
+      content="A narrative D3 remix of The Pudding's Mars weather story, focused on daily swings, seasonality, and data limits in Curiosity's Gale Crater weather records."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <p class="kicker">617 Data Visualization Remix</p>
+        <h1>Reading the Weather at Gale Crater</h1>
+        <p class="subtitle">
+          What Curiosity&rsquo;s weather station can tell us about daily swings,
+          Martian seasons, and the limits of measuring climate from one rover.
+        </p>
+        <div class="hero-meta">
+          <p>By William Millen</p>
+          <p>
+            Remixing Amber Thomas&rsquo;s
+            <a href="https://pudding.cool/2018/01/mars-weather/"
+              >Greetings from Mars</a
+            >
+          </p>
+        </div>
+        <div class="fact-strip">
+          <article class="fact-card">
+            <p class="fact-label">Landing context</p>
+            <p class="fact-value">August 2012</p>
+            <p class="fact-copy">
+              Curiosity landed in Gale Crater on August 6, 2012 U.S. time,
+              which shows up as August 7 in this dataset&rsquo;s Earth-date
+              column.
+            </p>
+          </article>
+          <article class="fact-card">
+            <p class="fact-label">Published span</p>
+            <p class="fact-value">
+              <span class="js-sol-count">1,894</span> sols
+            </p>
+            <p class="fact-copy">
+              This public file runs from sol 1 through sol
+              <span class="js-sol-max">1,977</span>, covering
+              <span class="js-start-date">2012</span> to
+              <span class="js-end-date">2018</span>.
+            </p>
+          </article>
+          <article class="fact-card">
+            <p class="fact-label">Working thesis</p>
+            <p class="fact-value">Weather, not a full climate map</p>
+            <p class="fact-copy">
+              The patterns are real and useful, but they are still filtered
+              through one rover, one crater, and a dataset with visible gaps.
+            </p>
+          </article>
+        </div>
+      </header>
+
+      <main>
+        <section class="story-section intro-section">
+          <div class="section-copy">
+            <p class="section-label">Orientation</p>
+            <h2>Before the charts: two Mars time terms worth knowing.</h2>
+            <p>
+              A <strong>sol</strong> is a Martian day. NASA pegs it at about 24
+              hours, 39 minutes, and 35 seconds, so it runs a little longer
+              than a day on Earth. Curiosity&rsquo;s weather station, REMS,
+              records each sol as one local slice of Gale Crater weather.
+            </p>
+            <p>
+              <strong>Ls</strong> is short for areocentric solar longitude. In
+              plain language, it tracks where Mars sits in its orbit, which
+              makes it a cleaner season marker than a simple month number. I use
+              Ls below because it helps connect what happens over short windows
+              of sols to the larger rhythm of a Martian year.
+            </p>
+          </div>
+          <div class="glossary-grid">
+            <article class="glossary-card">
+              <p class="glossary-term">Sol</p>
+              <p class="glossary-copy">
+                A Martian day. Slightly longer than an Earth day, so the rover&rsquo;s
+                clock slowly drifts against ours.
+              </p>
+            </article>
+            <article class="glossary-card">
+              <p class="glossary-term">Ls</p>
+              <p class="glossary-copy">
+                A 0&deg; to 360&deg; season marker around Mars&rsquo;s orbit, with
+                quarter turns at 0, 90, 180, and 270 degrees.
+              </p>
+            </article>
+            <article class="glossary-card">
+              <p class="glossary-term">REMS</p>
+              <p class="glossary-copy">
+                The Rover Environmental Monitoring Station on Curiosity, which
+                measured local temperature, pressure, and other weather-related
+                conditions in Gale Crater.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="story-section">
+          <div class="section-copy">
+            <p class="section-label">1. Daily swings</p>
+            <h2>Average temperature is the wrong first question.</h2>
+            <p>
+              If I collapsed Gale Crater into a single average, I&rsquo;d miss the
+              part that feels most Mars-like: the daily spread. In this file,
+              the typical gap between a sol&rsquo;s low and high is about
+              <span class="js-mean-range">64</span>&deg;C, and the widest swing
+              reaches <span class="js-max-range">85</span>&deg;C.
+            </p>
+            <p>
+              The chart below keeps both ends of the day visible at once.
+              Click and drag across any run of sols to focus the rest of the page on that
+              window.
+            </p>
+            <p class="chart-prompt">
+              Interaction: click and drag across the chart to select a stretch
+              of days, hover for one specific sol, or clear the selection to
+              reset the linked views.
+            </p>
+          </div>
+          <div class="viz-card">
+            <div class="viz-header">
+              <div>
+                <h3>Daily Extremes in Gale Crater</h3>
+                <p class="viz-subtitle">
+                  The band spans each sol&rsquo;s minimum and maximum air
+                  temperature.
+                </p>
+              </div>
+              <button id="clear-brush" class="control-button" type="button">
+                Clear selection
+              </button>
+            </div>
+            <div id="chart-extremes" class="chart-frame"></div>
+            <p class="chart-note">
+              The short marks under the axis use the published opacity labels.
+              In this CSV, almost every usable row is marked
+              <strong>Sunny</strong>, which is a useful warning sign for chart 3
+              rather than something to hide.
+            </p>
+          </div>
+        </section>
+
+        <section class="story-section">
+          <div class="section-copy">
+            <p class="section-label">2. Seasonal structure</p>
+            <h2>Pressure makes the Martian year easier to see.</h2>
+            <p>
+              The first chart moves through time in sols. This circular chart remaps the
+              same weather record into orbital position. Angle is Ls, and radius
+              is average pressure within each seasonal bin. The light line shows
+              the full dataset; the darker line echoes whatever sol window is
+              currently selected above.
+            </p>
+            <p>
+              That comparison matters because a local stretch of sols can look
+              noisy on its own. Once it is placed on the seasonal chart, the
+              pressure cycle becomes easier to read as part of a broader annual
+              pattern.
+            </p>
+            <p class="chart-prompt">
+              Interaction: make a selection in chart 1, then hover a seasonal
+              segment here to compare its full-dataset average with the selected
+              window.
+            </p>
+          </div>
+          <div class="viz-card">
+            <div class="viz-header">
+              <div>
+                <h3>Pressure Through the Martian Year</h3>
+                <p class="viz-subtitle">
+                  Seasonal bins of Ls plotted as a circular pressure profile.
+                </p>
+              </div>
+              <p id="season-status" class="status-text">
+                Showing the full dataset.
+              </p>
+            </div>
+            <div id="chart-season-wheel" class="chart-frame chart-frame-wheel"></div>
+            <p class="chart-note">
+              Curiosity sits south of Mars&rsquo;s equator, so the familiar season
+              labels map a little differently than a northern-hemisphere Earth
+              calendar. The point here is the cycle, not a perfect Earth
+              analogy.
+            </p>
+          </div>
+        </section>
+
+        <section class="story-section">
+          <div class="section-copy">
+            <p class="section-label">3. What got recorded</p>
+            <h2>The measurement record is part of the weather story too.</h2>
+            <p>
+              The first two charts show patterns in the published values. This
+              one backs up and asks a more basic question: what was actually
+              recorded, field by field, across the mission timeline?
+            </p>
+            <p>
+              That matters because the dataset is not a clean, uninterrupted log.
+              Temperature and pressure are mostly present, but there are visible
+              gaps, and the public <code>wind_speed</code> field is effectively
+              missing here. Instead of treating that as a footnote, this chart
+              makes the recording pattern visible.
+            </p>
+            <p class="chart-prompt">
+              Interaction: hover anywhere on the chart to inspect one sol, and
+              use the selected range from chart 1 to compare a focused window
+              with the full mission record.
+            </p>
+          </div>
+          <div class="viz-card">
+            <div class="viz-header viz-header-wrap">
+              <div>
+                <h3>What Curiosity Actually Recorded</h3>
+                <p class="viz-subtitle">
+                  Rows are fields in the public file and columns are sols.
+                  Darker marks mean a value was reported for that sol.
+                </p>
+              </div>
+              <div id="quality-summary" class="legend"></div>
+            </div>
+            <div id="chart-quality" class="chart-frame chart-frame-quality"></div>
+            <p class="chart-note">
+              This makes the data limits concrete. The local weather patterns are
+              still worth exploring, but the mission record is uneven and the
+              public wind field is not usable as a continuous time series here.
+            </p>
+          </div>
+        </section>
+
+        <section class="story-section notes-section">
+          <div class="section-copy">
+            <p class="section-label">4. Data notes and limits</p>
+            <h2>What these charts can support, and what they cannot.</h2>
+            <p>
+              The strongest part of this dataset is its long run of local
+              observations at one place. The weakest part is also that same
+              specificity. These views are useful for exploring Gale Crater, not
+              for claiming that all Martian weather works the same way
+              everywhere.
+            </p>
+          </div>
+          <div class="notes-grid">
+            <article class="note-card">
+              <h3>One rover, one location</h3>
+              <p>
+                Every row comes from Curiosity at Gale Crater, just south of the
+                equator. That is a meaningful local record, not a planet-wide
+                climate survey.
+              </p>
+            </article>
+            <article class="note-card">
+              <h3>Published as outreach data</h3>
+              <p>
+                The Pudding repo quotes the original Centro de Astrobiolog&iacute;a
+                disclaimer directly: this file is intended for outreach, and
+                other uses should be approached with caution.
+              </p>
+            </article>
+            <article class="note-card">
+              <h3>Operational and timing effects</h3>
+              <p>
+                The documentation says REMS does not measure continuously, can
+                sample at different times from one sol to the next, and can be
+                influenced by rover position, shade, orientation, and dust on
+                the rover.
+              </p>
+            </article>
+            <article class="note-card">
+              <h3>Missingness is part of the story</h3>
+              <p>
+                This CSV has
+                <span class="js-missing-weather">27</span> rows with missing
+                temperature or pressure values, and the published
+                <code>wind_speed</code> field is effectively unusable here. The
+                metadata notes wind transmission limits and marks missing values
+                as <code>NaN</code>.
+              </p>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="credits">
+        <div>
+          <p class="section-label">Credits and methods</p>
+          <h2>Sources, authorship, and disclosure</h2>
+        </div>
+        <div class="credits-grid">
+          <article>
+            <h3>Original story</h3>
+            <p>
+              Amber Thomas,
+              <a href="https://pudding.cool/2018/01/mars-weather/"
+                >Greetings from Mars</a
+              >, The Pudding, 2018.
+            </p>
+          </article>
+          <article>
+            <h3>Data</h3>
+            <p>
+              <a
+                href="https://github.com/the-pudding/data/tree/master/mars-weather"
+                >The Pudding public Mars weather dataset</a
+              >, based on Curiosity REMS measurements and the accompanying
+              README metadata.
+            </p>
+          </article>
+          <article>
+            <h3>NASA context</h3>
+            <p>
+              <a href="https://science.nasa.gov/mission/msl-curiosity/"
+                >Curiosity mission overview</a
+              >,
+              <a href="https://science.nasa.gov/resource/a-martian-day/"
+                >A Martian Day</a
+              >, and
+              <a
+                href="https://mars.nasa.gov/msl/mission/instruments/environsensors/rems/"
+                >REMS instrument overview</a
+              >.
+            </p>
+          </article>
+          <article>
+            <h3>Author</h3>
+            <p>William Millen</p>
+          </article>
+          <article>
+            <h3>AI use disclosure</h3>
+            <p>
+              AI was used for planning support, source gathering, debugging help,
+              and copy editing. The final story structure, design choices, and
+              assembled webpage were completed by the student author.
+            </p>
+          </article>
+        </div>
+      </footer>
+    </div>
+
+    <div id="tooltip" class="tooltip" hidden></div>
+
+    <script src="lib/d3.v7.min.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
